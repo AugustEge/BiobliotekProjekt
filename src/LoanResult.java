@@ -1,0 +1,6 @@
+public enum LoanResult {
+    SUCCESS,
+    RESOURCE_NOT_FOUND,
+    MEMBER_NOT_FOUND,
+    ALREADY_BORROWED
+}

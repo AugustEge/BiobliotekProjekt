@@ -2,15 +2,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Library {
-    private ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<Resource> resources = new ArrayList<>();
     private ArrayList<Member> members = new ArrayList<>();
     private ArrayList<Loan> loans = new ArrayList<>();
 
 
-    public void addBook(Book book) {
-        books.add(book);
+    public void addResource(Resource resource) {
+        resources.add(resource);
     }
-
     public void addMember(Member member) {
         members.add(member);
     }
@@ -19,8 +18,8 @@ public class Library {
         loans.add(loan);
     }
 
-    public ArrayList<Book> getBooks() {
-        return books;
+    public ArrayList<Resource> getResources() {
+        return resources;
     }
 
     public ArrayList<Member> getMembers() {
@@ -31,29 +30,25 @@ public class Library {
         return loans;
     }
 
-    public void printBooks() {
-        for (Book book : books) {
-            System.out.println(book);
+    public void printResources() {
+        for (Resource resource : resources) {
+            System.out.println(resource);
         }
     }
-
     public void printMembers() {
         for (Member member : members) {
             System.out.println(member);
         }
 
     }
-
-    Book getBook(int bookId) {
-        for (Book book : books) {
-            if (book.id == bookId) {
-                return book;
+    Resource getResource(String identifier) {
+        for (Resource resource : resources) {
+            if (resource.getIdentifier().equals(identifier)) {
+                return resource;
             }
         }
         return null;
     }
-
-
     Member getMember(int memberId) {
         for (Member member : members) {
             if (member.memberCode == memberId) {
@@ -63,28 +58,33 @@ public class Library {
         return null;
     }
 
-    boolean loanBook(int bookId, int memberId) {
-        Book book = getBook(bookId);
-        if (book == null) return false;
+    public LoanResult loanResource(String identifier, int memberId) {
+
+        Resource resource = getResource(identifier);
+        if (resource == null) {
+            return LoanResult.RESOURCE_NOT_FOUND;
+        }
 
         Member member = getMember(memberId);
-        if (member == null) return false;
+        if (member == null) {
+            return LoanResult.MEMBER_NOT_FOUND;
+        }
 
         for (Loan loan : loans) {
-            if (loan.getBook().equals(book)) {
-                return false;
+            if (loan.getResource().equals(resource)) {
+                return LoanResult.ALREADY_BORROWED;
             }
         }
 
-        Loan loan = new Loan(book, member, LocalDate.now());
+        Loan loan = new Loan(resource, member, LocalDate.now());
         loans.add(loan);
 
-        return true;
+        return LoanResult.SUCCESS;
     }
+    public boolean returnResource(String identifier) {
 
-    boolean returnBook(int bookId) {
         for (Loan loan : loans) {
-            if (loan.getBook().id == bookId) {
+            if (loan.getResource().getIdentifier().equals(identifier)) {
                 loans.remove(loan);
                 return true;
             }

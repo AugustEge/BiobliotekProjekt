@@ -1,34 +1,29 @@
-import java.util.Objects;
 
-public class Book {
-    final String author;
-    final String title;
-    final String isbn;
+public class Book extends Resource {
     final int id;
+    private int pages;
 
+    Book(String author, String title, String ISBNNumber,
+         int bookNr, int pages) {
 
-    Book(String author, String title, String ISBNNumber, int bookNr) {
-        this.author = author;
-        this.title = title;
-        this.isbn = ISBNNumber;
+        super(ISBNNumber, title, author);
         this.id = bookNr;
-//            this.borrowedDate = null;
-
+        this.pages = pages;
     }
-//        public boolean isAvailable() {
-//            return borrowedBy == null;
-//        }
 
+    public int getPages() {
+        return pages;
+    }
 
+    @Override
     public String toString() {
-//            String status = isAvailable() ? "på hylden" : borrowedBy+"; afleveringsfrist: " + getDueDate();
-
         return "Bognummer: " + id
-                + ", Forfatter: " + author
-                + ", Titel: " + title
-                + ", ISBN: " + isbn;
-//                    + " - " + status
+                + ", Forfatter: " + getCreator()
+                + ", Titel: " + getTitle()
+                + ", ISBN: " + getIdentifier()
+                + ", Antal sider: " + pages;
     }
+
 
 //        public boolean loanBook(Member member) {
 //            if (this.isAvailable()) {
@@ -53,14 +48,6 @@ public class Book {
 
 
 
-    @Override
-    public boolean equals (Object otherObj){
-        if (otherObj == null || getClass() != otherObj.getClass()) return false;
-        Book books = (Book) otherObj;
-        return Objects.equals(author, books.author)
-                && Objects.equals(title, books.title)
-                && Objects.equals(isbn, books.isbn)
-                && Objects.equals(id, books.id);
-    }
+
 }
 
